@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Non-overlapping Random Image Gallery</title>
+  <style>
+    body {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background-image: url('bg.jpg'); /* Add your background image URL here */
+      background-size: cover; /* Adjust the background size */
+      background-repeat: no-repeat; /* Prevent background repetition */
+      background-position: center; /* Center the background image */
+    }
+    h1 {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      pointer-events: none; /* So that clicks pass through the caption */
+    }
+    img {
+      width: 150px;
+      height: auto;
+      position: absolute;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<h1>
+    <span style="color: red;">H</span>
+    <span style="color: green;">e</span>
+    <span style="color: blue;">y</span>
+    <span style="color: orange;">&nbsp;</span>
+    <span style="color: purple;">R</span>
+    <span style="color: pink;">o</span>
+    <span style="color: cyan;">n</span>
+    <span style="color: yellow;">a</span>
+    <span style="color: brown;">n</span>
+    <span style="color: magenta;">!</span>
+    <span style="color: teal;">&nbsp;</span>
+    <span style="color: navy;">S</span>
+    <span style="color: olive;">e</span>
+    <span style="color: maroon;">l</span>
+    <span style="color: indigo;">e</span>
+    <span style="color: gold;">c</span>
+    <span style="color: silver;">t</span>
+    <span style="color: darkgreen;">&nbsp;</span>
+    <span style="color: darkorange;">a</span>
+    <span style="color: darkviolet;">l</span>
+    <span style="color: darkturquoise;">l</span>
+    <span style="color: darkcyan;">&nbsp;</span>
+    <span style="color: darkred;">t</span>
+    <span style="color: darkblue;">h</span>
+    <span style="color: darkmagenta;">e</span>
+    <span style="color: darkgoldenrod;">&nbsp;</span>
+    <span style="color: darkslategray;">M</span>
+    <span style="color: darkolivegreen;">a</span>
+    <span style="color: darkkhaki;">c</span>
+    <span style="color: darkorchid;">i</span>
+    <span style="color: darkgray;">s</span>
+    <span style="color: darkseagreen;">!</span>
+    </h1>
+      
+      
+
+<!-- Image 1 -->
+<img src="image1.png" alt="Image 1" onclick="imageClicked(this)">
+<!-- Image 2 -->
+<img src="image2.png" alt="Image 2" onclick="imageClicked(this)">
+<!-- Image 3 -->
+<img src="image3.png" alt="Image 3" onclick="imageClicked(this)">
+<!-- Image 4 --> 
+<img src="image4.png" alt="Image 4" onclick="imageClicked(this)">
+<!-- Image 5 -->
+<img src="image5.jpg" alt="Image 5" onclick="imageClicked(this)">
+<!-- Image 6 -->
+<img src="image6.jpg" alt="Image 6" onclick="imageClicked(this)">
+<!-- Image 7 -->
+<img src="image7.jpg" alt="Image 7" onclick="imageClicked(this)">
+<!-- Image 8 -->
+<img src="image8.jpg" alt="Image 8" onclick="imageClicked(this)">
+<!-- Image 9 -->
+<img src="image9.jpg" alt="Image 9" onclick="imageClicked(this)">
+<!-- Image 10 -->
+<img src="image10.jpg" alt="Image 10" onclick="imageClicked(this)">
+
+<script>
+  var clickedImages = 0;
+
+  function imageClicked(image) {
+    // Hide the clicked image
+    image.style.display = 'none';
+    
+    // Increment the clickedImages count
+    clickedImages++;
+    
+    // Check if all images have been clicked
+    if (clickedImages === 10) {
+      // Open the new page when all images are clicked
+      window.open("index.html", "_blank");
+      
+      // Reset the counter for future use
+      clickedImages = 0;
+    }
+  }
+
+  function isOverlapping(x, y, existingPositions) {
+    const margin = 150; // Considering the image width and height
+    for (let pos of existingPositions) {
+      if (x < pos.x + margin && x + margin > pos.x &&
+          y < pos.y + margin && y + margin > pos.y) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // Function to randomly place images without overlap
+  function placeImagesRandomly() {
+    const images = document.querySelectorAll('img');
+    const bodyWidth = document.body.clientWidth;
+    const bodyHeight = document.body.clientHeight;
+    const captionHeight = document.querySelector('h1').offsetHeight;
+    const positions = [];
+
+    images.forEach(image => {
+      let randomX, randomY;
+      do {
+        randomX = Math.floor(Math.random() * (bodyWidth - 150)); // Subtract image width to prevent overflow
+        randomY = Math.floor(Math.random() * (bodyHeight - 150)); // Subtract image height to prevent overflow
+      } while (
+        isOverlapping(randomX, randomY, positions) ||
+        (randomX > bodyWidth / 2 - 75 && randomX < bodyWidth / 2 + 75 && randomY > bodyHeight / 2 - captionHeight / 2 - 75 && randomY < bodyHeight / 2 + captionHeight / 2 + 75)
+      );
+
+      positions.push({ x: randomX, y: randomY });
+      image.style.left = `${randomX}px`;
+      image.style.top = `${randomY}px`;
+    });
+  }
+
+  // Place images randomly when the page loads
+  window.onload = placeImagesRandomly;
+</script>
+
+</body>
+</html>
