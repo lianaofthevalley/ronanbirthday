@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matching Letters Game</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-image: url('bg2.jpg');
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .letter {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            user-select: none;
+            position: absolute;
+            -webkit-text-stroke: 1px black; /* Added outline */
+        }
+
+        #pictures-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .picture-row {
+            display: flex;
+            justify-content: center;
+            margin: 10px;
+        }
+
+        .picture {
+            width: 100px;
+            height: 100px;
+            margin: 5px;
+            background-color: #ddd;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="pictures-container">
+        <div class="picture-row" id="row-1"></div>
+        <div class="picture-row" id="row-2"></div>
+        <div class="picture-row" id="row-3"></div>
+    </div>
+    <script>
+        const latinLetters = ['h', 'a', 'p', 'p', 'y', 'b', 'i', 'r', 't', 'h', 'd', 'a', 'y', 'r', 'o', 'n', 'a', 'n'];
+        const cyrillicLetters = ['Х', 'А', 'П', 'П', 'И', 'Б', 'И', 'Р', 'Т', 'Х', 'Д', 'А', 'И', 'Р', 'О', 'Н', 'А', 'Н'];
+        const matchingPairs = {
+            'h': 'Х', 'a': 'А', 'p': 'П', 'y': 'И', 'b': 'Б', 'i': 'И', 'r': 'Р', 't': 'Т', 'd': 'Д', 'o': 'О', 'n': 'Н'
+        };
+
+        const pictureOrder = [
+            'h', 'a', 'p', 'p', 'y',  // Row 1
+            'b', 'i', 'r', 't', 'h', 'd', 'a', 'y', // Row 2
+            'r', 'o', 'n', 'a', 'n'  // Row 3
+        ];
+
+        const picturePositions = {
+            'h': [0, 9], 'a': [1, 11, 16], 'p': [2, 3], 'y': [4, 12], 'b': [5], 'i': [6], 'r': [7, 13], 
+            't': [8], 'd': [10], 'o': [14], 'n': [15, 18]
+        };
+
+        const images = Array(pictureOrder.length).fill(null);
+
+        let selectedLetters = [];
+
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        function getRandomPosition() {
+            const x = Math.random() * (window.innerWidth - 50);
+            const y = Math.random() * (window.innerHeight - 50);
+            return { x, y };
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function createLetterElement(letter, isLatin) {
+            const letterElement = document.createElement('div');
+            letterElement.className = 'letter';
+            letterElement.textContent = letter;
+            letterElement.style.color = getRandomColor();
+            const position = getRandomPosition();
+            letterElement.style.left = `${position.x}px`;
+            letterElement.style.top = `${position.y}px`;
+            letterElement.addEventListener('click', () => handleLetterClick(letterElement, letter, isLatin));
+            return letterElement;
+        }
+
+        function handleLetterClick(element, letter, isLatin) {
+            selectedLetters.push({ element, letter, isLatin });
+            if (selectedLetters.length === 2) {
+                const [first, second] = selectedLetters;
+                if (isMatchingPair(first, second)) {
+                    addImage(first.isLatin ? first.letter : second.letter);
+                    first.element.remove();
+                    second.element.remove();
+                    displayAllImages();
+                }
+                selectedLetters = [];
+            }
+        }
+
+        function isMatchingPair(first, second) {
+            if (first.isLatin && !second.isLatin) {
+                return matchingPairs[first.letter] === second.letter;
+            }
+            if (!first.isLatin && second.isLatin) {
+                return matchingPairs[second.letter] === first.letter;
+            }
+            return false;
+        }
+
+        function addImage(letter) {
+            const positions = picturePositions[letter];
+            for (let pos of positions) {
+                if (images[pos] === null) {
+                    images[pos] = letter;
+                    break;
+                }
+            }
+        }
+
+        function displayAllImages() {
+            const row1 = document.querySelector('#row-1');
+            const row2 = document.querySelector('#row-2');
+            const row3 = document.querySelector('#row-3');
+
+            row1.innerHTML = '';
+            row2.innerHTML = '';
+            row3.innerHTML = '';
+
+            pictureOrder.forEach((letter, index) => {
+                if (images.includes(letter)) {
+                    const pictureElement = document.createElement('div');
+                    pictureElement.className = 'picture';
+                    pictureElement.style.backgroundImage = `url(${letter}.jpeg)`;
+
+                    if (index < 5) {
+                        row1.appendChild(pictureElement);
+                    } else if (index < 13) {
+                        row2.appendChild(pictureElement);
+                    } else {
+                        row3.appendChild(pictureElement);
+                    }
+                }
+            });
+        }
+
+        function initializeGame() {
+            const lettersContainer = document.createElement('div');
+            lettersContainer.id = 'letters-container';
+            document.body.insertBefore(lettersContainer, document.getElementById('pictures-container'));
+            const allLetters = [...latinLetters, ...cyrillicLetters];
+            shuffleArray(allLetters);
+            allLetters.forEach(letter => {
+                const isLatin = latinLetters.includes(letter);
+                lettersContainer.appendChild(createLetterElement(letter, isLatin));
+            });
+        }
+
+        initializeGame();
+    </script>
+</body>
+</html>

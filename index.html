@@ -72,34 +72,37 @@
     <span style="color: darkgray;">s</span>
     <span style="color: darkseagreen;">!</span>
     </h1>
-      
-      
 
 <!-- Image 1 -->
-<img src="image1.png" alt="Image 1" onclick="imageClicked(this)">
+<img src="im1.png" alt="Image 1" onclick="imageClicked(this)">
 <!-- Image 2 -->
-<img src="image2.png" alt="Image 2" onclick="imageClicked(this)">
+<img src="im2.png" alt="Image 2" onclick="imageClicked(this)">
 <!-- Image 3 -->
-<img src="image3.png" alt="Image 3" onclick="imageClicked(this)">
+<img src="im3.png" alt="Image 3" onclick="imageClicked(this)">
 <!-- Image 4 --> 
-<img src="image4.png" alt="Image 4" onclick="imageClicked(this)">
+<img src="im4.png" alt="Image 4" onclick="imageClicked(this)">
 <!-- Image 5 -->
-<img src="image5.jpg" alt="Image 5" onclick="imageClicked(this)">
+<img src="im5.png" alt="Image 5" onclick="imageClicked(this)">
 <!-- Image 6 -->
-<img src="image6.jpg" alt="Image 6" onclick="imageClicked(this)">
+<img src="im6.png" alt="Image 6" onclick="imageClicked(this)">
 <!-- Image 7 -->
-<img src="image7.jpg" alt="Image 7" onclick="imageClicked(this)">
+<img src="im7.png" alt="Image 7" onclick="imageClicked(this)">
 <!-- Image 8 -->
-<img src="image8.jpg" alt="Image 8" onclick="imageClicked(this)">
+<img src="im8.png" alt="Image 8" onclick="imageClicked(this)">
 <!-- Image 9 -->
-<img src="image9.jpg" alt="Image 9" onclick="imageClicked(this)">
+<img src="im9.png" alt="Image 9" onclick="imageClicked(this)">
 <!-- Image 10 -->
-<img src="image10.jpg" alt="Image 10" onclick="imageClicked(this)">
+<img src="im10.png" alt="Image 10" onclick="imageClicked(this)">
+
+<audio id="meow-sound" src="meow.wav"></audio> <!-- Add your audio file here -->
 
 <script>
   var clickedImages = 0;
 
   function imageClicked(image) {
+    // Play the meow sound
+    document.getElementById('meow-sound').play();
+    
     // Hide the clicked image
     image.style.display = 'none';
     
@@ -109,7 +112,7 @@
     // Check if all images have been clicked
     if (clickedImages === 10) {
       // Open the new page when all images are clicked
-      window.open("index.html", "_blank");
+      window.open("matrix.html", "_blank");
       
       // Reset the counter for future use
       clickedImages = 0;

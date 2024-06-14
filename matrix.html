@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Animation</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('matrixbg.jpeg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image {
+            width: 0;
+            height: auto;
+            transform: rotate(0deg);
+            transition: width 5s ease-in-out, transform 5s ease-in-out;
+        }
+
+        .image.animate {
+            width: 50%;
+            transform: rotate(360deg);
+        }
+
+        .button-container {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .button-container.show {
+            opacity: 1;
+        }
+
+        .button {
+            background-color: #E93535; 
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="caught.png" alt="Animated Image" class="image" id="image">
+        <div class="button-container" id="buttonContainer">
+            <button class="button" id="redButton">Don't Push This Button</button>
+        </div>
+    </div>
+
+    <script>
+        window.onload = () => {
+            const image = document.getElementById('image');
+            const buttonContainer = document.getElementById('buttonContainer');
+            const redButton = document.getElementById('redButton');
+            
+            image.classList.add('animate');
+            setTimeout(() => {
+                buttonContainer.classList.add('show');
+            }, 8000); // 5 seconds after the image animation completes (5s for image + 5s delay)
+            
+            redButton.addEventListener('click', () => {
+                window.location.href = 'abc.html';
+            });
+        };
+    </script>
+</body>
+</html>
